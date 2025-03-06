@@ -16,6 +16,9 @@
         </div>
         <div class="flex justify-between items-center">
           <span class="text-sm text-gray-500">{{movie.runTime}} min</span>
+          <a [routerLink]="['/movie', movie.shortUrl]" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+            View Details
+          </a>
         </div>
       </div>
     </div>
