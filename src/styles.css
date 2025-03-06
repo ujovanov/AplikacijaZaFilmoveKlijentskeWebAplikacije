@@ -1,3 +1,29 @@
+@import "tailwindcss";
+
+@theme{
+    --color-secondary:#FFEFE8;
+}
+
 body {
-    font-family: monospace;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: black;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FFEFE8;
+    border: 1px solid black;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: red;
 }

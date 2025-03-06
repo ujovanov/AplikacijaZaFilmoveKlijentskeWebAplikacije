@@ -1,0 +1,168 @@
+<div class="flex flex-col items-center justify-center min-h-svh bg-gray-100 pt-20">
+    <div class="p-8 bg-white rounded-lg shadow-md md:w-2/5 w-full">
+        <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" id="firstName" name="firstName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Enter your first name" required>
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Enter your last name" required>
+                </div>
+            </div>
+            
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Enter your email" required>
+            </div>
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Enter your phone number" required>
+            </div> 
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                <input type="text" id="address" name="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Enter your address" required>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Enter your password" required>
+            </div>
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Confirm your password" required>
+            </div>
+            <div>
+                <label class="block text-2xl font-semibold text-gray-800 mb-4">Choose Your Favorite Movie Genres</label>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center items-center w-full">
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="drama" name="genres" value="Drama" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/drama.jpg" alt="Drama" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('drama').click()">
+                            <label for="drama" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Drama</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="action" name="genres" value="Akcija" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/action.jpg" alt="Action" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('action').click()">
+                            <label for="action" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Action</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="crime" name="genres" value="Kriminalistički" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/crime.jpg" alt="Crime" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('crime').click()">
+                            <label for="crime" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Crime</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="comedy" name="genres" value="Komedija" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/comedy.jpg" alt="Comedy" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('comedy').click()">
+                            <label for="comedy" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Comedy</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="fantasy" name="genres" value="Fantazija" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/fantasy.jpg" alt="Fantasy" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('fantasy').click()">
+                            <label for="fantasy" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Fantasy</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="animated" name="genres" value="Animirani" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/animated.jpg" alt="Animated" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('animated').click()">
+                            <label for="animated" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Animated</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="adventure" name="genres" value="Avantura" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/adventure.jpg" alt="Adventure" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('adventure').click()">
+                            <label for="adventure" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Adventure</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="thriller" name="genres" value="Triler" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/thriller.jpg" alt="Thriller" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('thriller').click()">
+                            <label for="thriller" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Thriller</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="scifi" name="genres" value="Naučna fantastika" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/scifi.jpg" alt="Sci-Fi" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('scifi').click()">
+                            <label for="scifi" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Sci-Fi</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="documentary" name="genres" value="Dokumentarni film" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/documentary.jpg" alt="Documentary" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('documentary').click()">
+                            <label for="documentary" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Documentary</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="music" name="genres" value="Muzički film" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/music.jpg" alt="Music" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('music').click()">
+                            <label for="music" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Music</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="horror" name="genres" value="Horor" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/horror.jpg" alt="Horror" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('horror').click()">
+                            <label for="horror" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Horror</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="biography" name="genres" value="Biografija" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/biography.jpg" alt="Biography" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('biography').click()">
+                            <label for="biography" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Biography</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="family" name="genres" value="Porodični film" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/family.jpg" alt="Family" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('family').click()">
+                            <label for="family" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Family</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="mystery" name="genres" value="Misterija" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/mystery.jpg" alt="Mystery" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('mystery').click()">
+                            <label for="mystery" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Mystery</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="romance" name="genres" value="Romantični/ljubavni" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/romance.jpg" alt="Romance" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('romance').click()">
+                            <label for="romance" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Romance</label>
+                        </div>
+                    </div>
+                    <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
+                        <input type="checkbox" id="musical" name="genres" value="Mjuzikl" class="hidden">
+                        <div class="relative group cursor-pointer">
+                            <img src="assets/genreImages/musical.jpg" alt="Musical" class="w-full h-48 object-cover rounded-xl shadow-lg" onclick="document.getElementById('musical').click()">
+                            <label for="musical" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white py-2 rounded-b-xl text-center">Musical</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-700">
+                Register
+            </button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600">
+            Already have an account? <a href="/login" class="text-red-500 hover:text-red-600">Log in</a>
+        </p>
+    </div>
+</div>
