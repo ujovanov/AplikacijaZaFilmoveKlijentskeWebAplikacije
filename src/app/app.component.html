@@ -1,12 +1,12 @@
-<nav class="w-full flex justify-between h-24 bg-secondary text-red-500 font-bold text-xl">
-    <div class="flex justify-center items-center w-1/4 h-full">
-        <a href="/" class="w-1/2 h-full"><img src="LogoNoBg.png" alt="CineKlik" class="w-full h-full"/></a>
+<nav class="w-full flex flex-col md:flex-row justify-between bg-secondary text-red-500 font-bold text-xl p-4 md:h-24">
+    <div class="flex justify-center md:justify-start items-center w-full md:w-1/4 sm:h-full h-16">
+        <a href="/" class="w-auto h-full"><img src="LogoNoBg.png" alt="CineKlik" class="h-full object-contain"/></a>
     </div>
-    <ul class="flex gap-4 justify-end pr-40 items-center h-full w-3/4">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/profile">Profile</a></li>
+    <ul class="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-end w-full md:w-3/4 py-4 md:py-0 md:pr-8 lg:pr-40">
+        <li class="py-2 md:py-0"><a href="/">Home</a></li>
+        <li class="py-2 md:py-0"><a href="/about">About</a></li>
+        <li class="py-2 md:py-0"><a href="/login">Login</a></li>
+        <li class="py-2 md:py-0"><a href="/profile">Profile</a></li>
     </ul>
 </nav>
 <router-outlet />
