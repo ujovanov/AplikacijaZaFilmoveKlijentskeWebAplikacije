@@ -17,6 +17,8 @@ export interface Movie {
     runTime: number;
     createdAt: string;
     updatedAt: string | null;
+    price: number;
+    rating: number[]|null;
     director: Director;
     movieActors: MovieActor[];
     movieGenres: MovieGenre[];

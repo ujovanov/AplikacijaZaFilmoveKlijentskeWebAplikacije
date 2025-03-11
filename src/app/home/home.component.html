@@ -1,19 +1,162 @@
 <div class="container mx-auto px-4 py-8">
-  <div *ngIf="!movies.length" class="flex justify-center items-center h-64">
-    <img src="assets/preloader.gif" alt="Loading" class="w-1/3 h-full">
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Movie search</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="mb-4">
+        <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          [(ngModel)]="searchCriteria.title" 
+          (input)="applyFilters()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter movie title">
+      </div>
+      
+      <div class="mb-4">
+        <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
+        <input 
+          type="text" 
+          id="description" 
+          [(ngModel)]="searchCriteria.description" 
+          (input)="applyFilters()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter keywords">
+      </div>
+      
+      <div class="mb-4">
+        <label for="genre" class="block text-gray-700 font-medium mb-2">Genre</label>
+        <select 
+          id="genre" 
+          [(ngModel)]="searchCriteria.genre" 
+          (change)="applyFilters()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+          <option value="">All genres</option>
+          <option *ngFor="let genre of allGenres" [value]="genre">{{ genre }}</option>
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2">Duration (min)</label>
+        <div class="flex items-center gap-2">
+          <input 
+            type="number" 
+            [(ngModel)]="searchCriteria.minDuration" 
+            (input)="applyFilters()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Min">
+          <span>-</span>
+          <input 
+            type="number" 
+            [(ngModel)]="searchCriteria.maxDuration" 
+            (input)="applyFilters()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Max">
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label for="director" class="block text-gray-700 font-medium mb-2">Director</label>
+        <input 
+          type="text" 
+          id="director" 
+          [(ngModel)]="searchCriteria.director" 
+          (input)="applyFilters()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter director name">
+      </div>
+      
+      <div class="mb-4">
+        <label for="actor" class="block text-gray-700 font-medium mb-2">Actors</label>
+        <input 
+          type="text" 
+          id="actor" 
+          [(ngModel)]="searchCriteria.actor" 
+          (input)="applyFilters()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Enter actor name">
+      </div>
+      
+      <div class="mb-4">
+        <label for="releaseDate" class="block text-gray-700 font-medium mb-2">Release date</label>
+        <input 
+          type="date" 
+          id="releaseDate" 
+          [(ngModel)]="searchCriteria.releaseDate" 
+          (input)="applyFilters()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+      </div>
+
+      <div class="mb-4">
+        <label for="minPrice" class="block text-gray-700 font-medium mb-2">Price</label>
+        <div class="flex items-center gap-2">
+          <input 
+            type="number" 
+            id="minPrice" 
+            [(ngModel)]="searchCriteria.minPrice" 
+            (input)="applyFilters()"
+            placeholder="Min"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"/>
+          <span>-</span>
+            <input 
+            type="number" 
+            id="maxPrice" 
+            [(ngModel)]="searchCriteria.maxPrice" 
+            (input)="applyFilters()"
+            placeholder="Max"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"/>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="rating" class="block text-gray-700 font-medium mb-2">Rating</label>
+        <div class="flex items-center gap-2">
+          <select 
+            id="rating"
+            [(ngModel)]="searchCriteria.minRating"
+            (change)="applyFilters()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option value="">All</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-end mt-4">
+      <button 
+        (click)="resetFilters()" 
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors mr-2">
+        Reset filters
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!filteredMovies.length" class="flex justify-center items-center h-64">
+    <img *ngIf="loading" src="assets/preloader.gif" alt="Loading" class="w-1/3 h-full">
+    <p *ngIf="!loading" class="text-xl text-gray-600">No results found for the given search</p>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <div *ngFor="let movie of movies" class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105">
+    <div *ngFor="let movie of filteredMovies" class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105">
       <img [src]="movie.poster" [alt]="movie.title" class="w-full h-100 object-cover">
       <div class="p-4 flex flex-col justify-between sm:h-1/3">
-        <div class="flex flex-col h-2/3">
+        <div class="flex flex-col h-2/3 mb-6">
           <h2 class="text-xl font-bold mb-2 text-gray-800">{{movie.title}}</h2>
           <p class="text-gray-600 text-sm mb-2">{{movie.shortDescription.substring(0, 100)}}...</p>
           <div class="flex flex-wrap gap-2 mb-3">
             <span *ngFor="let genre of movie.movieGenres" class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
               {{genre.genre.name}}
             </span>
+          </div>
+          <div class="flex flex-col items-start">
+            <span class="text-md font-bold text-gray-700">Rating: {{averageRating(movie.rating||[])}}</span>
+            <span class="text-md font-bold text-gray-700">Price: {{movie.price}} RSD</span>
           </div>
         </div>
         <div class="items-center flex justify-between mt-8">
