@@ -5,8 +5,9 @@
     <ul class="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-end w-full md:w-3/4 py-4 md:py-0 md:pr-8 lg:pr-40">
         <li class="py-2 md:py-0"><a href="/">Home</a></li>
         <li class="py-2 md:py-0"><a href="/about">About</a></li>
-        <li class="py-2 md:py-0"><a href="/login">Login</a></li>
-        <li class="py-2 md:py-0"><a href="/profile">Profile</a></li>
+        <li class="py-2 md:py-0" *ngIf="!activeUser?.active"><a href="/login">Login</a></li>
+        <li class="py-2 md:py-0 cursor-pointer" *ngIf="activeUser?.active" (click)="logout()">Logout</li>
+        <li class="py-2 md:py-0" *ngIf="activeUser?.active"><a href="/profile">Profile</a></li>
     </ul>
 </nav>
 <router-outlet />

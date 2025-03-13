@@ -5,6 +5,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SearchCriteria } from '../../models/searchCriteria.model';
+import { rating } from '../../models/comment.model';
 
 @Component({
   selector: 'app-home',
@@ -33,23 +34,41 @@ export class HomeComponent implements OnInit {
   };
 
   async ngOnInit() {
-    try {
-      const response = await axios.get<Movie[]>('https://movie.pequla.com/api/movie');
-      this.movies = response.data.map(movie => ({
-        ...movie,
-        price: Math.floor(Math.random() * (700 - 300 + 1)) + 300,
-        rating: Math.random() > 0.2 ? Array(Math.floor(Math.random() * 5 + 1))
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 5) + 1) 
-          : null
-      }));
+    const storedMovies = sessionStorage.getItem('movies');
+    
+    if (storedMovies) {
+      this.movies = JSON.parse(storedMovies);
       this.filteredMovies = [...this.movies];
       this.extractGenres();
-      console.log('Fetched movies:', this.movies);
       this.loading = false;
-    } catch (error) {
-      console.error('Error fetching movies:', error);
-      this.loading = false;
+    } else {
+      try {
+        console.log('Fetching movies from API');
+        const response = await axios.get<Movie[]>('https://movie.pequla.com/api/movie');
+        this.movies = response.data.map(movie => ({
+          ...movie,
+          price: Math.floor(Math.random() * (700 - 300 + 1)) + 300,
+          rating: Math.random() > 0.2 ? Array(Math.floor(Math.random() * 5 + 1))
+            .fill(0)
+            .map(() => ({
+              rating: Math.floor(Math.random() * 5) + 1,
+              comment: null,
+              userName: 'anonymous',
+              createdAt: new Date().toLocaleDateString('en-GB')
+            }))
+            : null
+        }));
+        
+        sessionStorage.setItem('movies', JSON.stringify(this.movies));
+        
+        this.filteredMovies = [...this.movies];
+        this.extractGenres();
+        console.log('Fetched movies:', this.movies);
+        this.loading = false;
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+        this.loading = false;
+      }
     }
   }
 
@@ -124,9 +143,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  averageRating(ratings: number[]): number {
+  averageRating(ratings: rating[]): number {
     if (!ratings || ratings.length === 0) return 0;
-    const sum = ratings.reduce((s, rating) => s + rating, 0);
+    const sum = ratings.reduce((s, rating) => s + rating.rating, 0);
     return parseFloat((sum / ratings.length).toFixed(2));
   }
 

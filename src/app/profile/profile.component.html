@@ -1,19 +1,29 @@
 <div class="container mx-auto p-8">
     <div class="bg-white shadow-lg rounded-lg p-6">
-        <h1 class="text-3xl font-bold mb-6">My Profile</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">My Profile</h1>
+        </div>
         
-        <form class="space-y-6">
+        <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {{ errorMessage }}
+        </div>
+        
+        <div *ngIf="successMessage" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {{ successMessage }}
+        </div>
+        
+        <form class="space-y-6" (ngSubmit)="onSubmit()" #profileForm="ngForm">
             <!-- Personal Information -->
             <div class="space-y-4">
                 <h2 class="text-xl font-semibold">Personal Information</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label>First Name</label>
-                        <input type="text" class="h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                        <input type="text" [(ngModel)]="userData.firstName" name="firstName" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                     <div>
                         <label>Last Name</label>
-                        <input type="text" class="h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                        <input type="text" [(ngModel)]="userData.lastName" name="lastName" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                 </div>
             </div>
@@ -23,15 +33,16 @@
                 <div class="space-y-4">
                     <div>
                         <label>Email</label>
-                        <input type="email" class="h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                        <input type="email" [(ngModel)]="userData.email" name="email" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2" readonly>
+                        <p class="text-sm text-gray-500 mt-1">Email cannot be changed</p>
                     </div>
                     <div>
                         <label>Phone</label>
-                        <input type="tel" class="h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                        <input type="tel" [(ngModel)]="userData.phoneNumber" name="phoneNumber" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                     <div>
                         <label>Address</label>
-                        <input type="text" class="h-10 block w-full rounded-md border-gray-300 shadow-sm"/>
+                        <input type="text" [(ngModel)]="userData.address" name="address" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2"/>
                     </div>
                 </div>
             </div>
@@ -40,121 +51,206 @@
                 <h2 class="text-xl font-semibold">Favorite Movie Genres</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="drama" name="genres" value="Drama" class="hidden">
+                        <input type="checkbox" id="drama" name="genres" value="Drama" class="hidden" [checked]="isGenreSelected('Drama')" (change)="onGenreChange($event, 'Drama')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/drama.jpg" alt="Drama" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('drama').click()">
+                            <div *ngIf="isGenreSelected('Drama')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="drama" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Drama</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="action" name="genres" value="Akcija" class="hidden">
+                        <input type="checkbox" id="action" name="genres" value="Akcija" class="hidden" [checked]="isGenreSelected('Akcija')" (change)="onGenreChange($event, 'Akcija')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/action.jpg" alt="Action" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('action').click()">
+                            <div *ngIf="isGenreSelected('Akcija')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="action" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Action</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="crime" name="genres" value="Kriminalistički" class="hidden">
+                        <input type="checkbox" id="crime" name="genres" value="Kriminalistički" class="hidden" [checked]="isGenreSelected('Kriminalistički')" (change)="onGenreChange($event, 'Kriminalistički')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/crime.jpg" alt="Crime" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('crime').click()">
+                            <div *ngIf="isGenreSelected('Kriminalistički')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="crime" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Crime</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="comedy" name="genres" value="Komedija" class="hidden">
+                        <input type="checkbox" id="comedy" name="genres" value="Komedija" class="hidden" [checked]="isGenreSelected('Komedija')" (change)="onGenreChange($event, 'Komedija')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/comedy.jpg" alt="Comedy" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('comedy').click()">
+                            <div *ngIf="isGenreSelected('Komedija')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="comedy" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Comedy</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="fantasy" name="genres" value="Fantazija" class="hidden">
+                        <input type="checkbox" id="fantasy" name="genres" value="Fantazija" class="hidden" [checked]="isGenreSelected('Fantazija')" (change)="onGenreChange($event, 'Fantazija')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/fantasy.jpg" alt="Fantasy" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('fantasy').click()">
+                            <div *ngIf="isGenreSelected('Fantazija')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="fantasy" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Fantasy</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="animated" name="genres" value="Animirani" class="hidden">
+                        <input type="checkbox" id="animated" name="genres" value="Animirani" class="hidden" [checked]="isGenreSelected('Animirani')" (change)="onGenreChange($event, 'Animirani')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/animated.jpg" alt="Animated" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('animated').click()">
+                            <div *ngIf="isGenreSelected('Animirani')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="animated" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Animated</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="adventure" name="genres" value="Avantura" class="hidden">
+                        <input type="checkbox" id="adventure" name="genres" value="Avantura" class="hidden" [checked]="isGenreSelected('Avantura')" (change)="onGenreChange($event, 'Avantura')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/adventure.jpg" alt="Adventure" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('adventure').click()">
+                            <div *ngIf="isGenreSelected('Avantura')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="adventure" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Adventure</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="thriller" name="genres" value="Triler" class="hidden">
+                        <input type="checkbox" id="thriller" name="genres" value="Triler" class="hidden" [checked]="isGenreSelected('Triler')" (change)="onGenreChange($event, 'Triler')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/thriller.jpg" alt="Thriller" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('thriller').click()">
+                            <div *ngIf="isGenreSelected('Triler')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="thriller" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Thriller</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="scifi" name="genres" value="Naučna fantastika" class="hidden">
+                        <input type="checkbox" id="scifi" name="genres" value="Naučna fantastika" class="hidden" [checked]="isGenreSelected('Naučna fantastika')" (change)="onGenreChange($event, 'Naučna fantastika')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/scifi.jpg" alt="Sci-Fi" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('scifi').click()">
+                            <div *ngIf="isGenreSelected('Naučna fantastika')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="scifi" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Sci-Fi</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="documentary" name="genres" value="Dokumentarni film" class="hidden">
+                        <input type="checkbox" id="documentary" name="genres" value="Dokumentarni film" class="hidden" [checked]="isGenreSelected('Dokumentarni film')" (change)="onGenreChange($event, 'Dokumentarni film')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/documentary.jpg" alt="Documentary" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('documentary').click()">
+                            <div *ngIf="isGenreSelected('Dokumentarni film')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="documentary" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Documentary</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="music" name="genres" value="Muzički film" class="hidden">
+                        <input type="checkbox" id="music" name="genres" value="Muzički film" class="hidden" [checked]="isGenreSelected('Muzički film')" (change)="onGenreChange($event, 'Muzički film')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/music.jpg" alt="Music" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('music').click()">
+                            <div *ngIf="isGenreSelected('Muzički film')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="music" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Music</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="horror" name="genres" value="Horor" class="hidden">
+                        <input type="checkbox" id="horror" name="genres" value="Horor" class="hidden" [checked]="isGenreSelected('Horor')" (change)="onGenreChange($event, 'Horor')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/horror.jpg" alt="Horror" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('horror').click()">
+                            <div *ngIf="isGenreSelected('Horor')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="horror" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Horror</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="biography" name="genres" value="Biografija" class="hidden">
+                        <input type="checkbox" id="biography" name="genres" value="Biografija" class="hidden" [checked]="isGenreSelected('Biografija')" (change)="onGenreChange($event, 'Biografija')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/biography.jpg" alt="Biography" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('biography').click()">
+                            <div *ngIf="isGenreSelected('Biografija')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="biography" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Biography</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="family" name="genres" value="Porodični film" class="hidden">
+                        <input type="checkbox" id="family" name="genres" value="Porodični film" class="hidden" [checked]="isGenreSelected('Porodični film')" (change)="onGenreChange($event, 'Porodični film')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/family.jpg" alt="Family" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('family').click()">
+                            <div *ngIf="isGenreSelected('Porodični film')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="family" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Family</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="mystery" name="genres" value="Misterija" class="hidden">
+                        <input type="checkbox" id="mystery" name="genres" value="Misterija" class="hidden" [checked]="isGenreSelected('Misterija')" (change)="onGenreChange($event, 'Misterija')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/mystery.jpg" alt="Mystery" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('mystery').click()">
+                            <div *ngIf="isGenreSelected('Misterija')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="mystery" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Mystery</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="romance" name="genres" value="Romantični/ljubavni" class="hidden">
+                        <input type="checkbox" id="romance" name="genres" value="Romantični/ljubavni" class="hidden" [checked]="isGenreSelected('Romantični/ljubavni')" (change)="onGenreChange($event, 'Romantični/ljubavni')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/romance.jpg" alt="Romance" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('romance').click()">
+                            <div *ngIf="isGenreSelected('Romantični/ljubavni')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="romance" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Romance</label>
                         </div>
                     </div>
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
-                        <input type="checkbox" id="musical" name="genres" value="Mjuzikl" class="hidden">
+                        <input type="checkbox" id="musical" name="genres" value="Mjuzikl" class="hidden" [checked]="isGenreSelected('Mjuzikl')" (change)="onGenreChange($event, 'Mjuzikl')">
                         <div class="relative group cursor-pointer overflow-hidden rounded-xl">
                             <img src="assets/genreImages/musical.jpg" alt="Musical" class="w-full h-40 object-cover rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-110" onclick="document.getElementById('musical').click()">
+                            <div *ngIf="isGenreSelected('Mjuzikl')" class="absolute top-0 right-0 bg-green-500 rounded-full p-1 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
                             <label for="musical" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white py-3 px-2 font-medium rounded-b-xl text-center">Musical</label>
                         </div>
                     </div>
@@ -165,16 +261,17 @@
                 <h2 class="text-xl font-semibold">Change Password</h2>
                 <div class="space-y-4">
                     <div>
-                        <input type="password" class="h-10 block w-full rounded-md border-gray-300 shadow-sm" placeholder="New Password">
+                        <input type="password" [(ngModel)]="newPassword" name="newPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="New Password">
                     </div>
                     <div>
-                        <input type="password" class="h-10 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Confirm New Password">
+                        <input type="password" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Confirm New Password">
+                        <p class="text-sm text-gray-500 mt-1">Leave blank if you don't want to change your password</p>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end space-x-4">
-                <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Cancel</button>
+                <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md" (click)="loadUserData()">Cancel</button>
                 <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">Save Changes</button>
             </div>
         </form>
