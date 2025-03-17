@@ -259,30 +259,189 @@
 
             <div class="space-y-4">
                 <h2 class="text-xl font-semibold">Change Password</h2>
-                <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <input type="password" [(ngModel)]="newPassword" name="newPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="New Password">
+                        <label>New Password</label>
+                        <input type="password" [(ngModel)]="newPassword" name="newPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                     <div>
-                        <input type="password" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="Confirm New Password">
-                        <p class="text-sm text-gray-500 mt-1">Leave blank if you don't want to change your password</p>
+                        <label>Confirm New Password</label>
+                        <input type="password" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-end space-x-4">
-                <button type="button" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md" (click)="loadUserData()">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">Save Changes</button>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Save Changes
+                </button>
             </div>
         </form>
-    </div>
 
-    <!-- Shopping Cart & Reservations -->
-    <div class="mt-8 bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-semibold mb-4">My Reservations</h2>
-        <div class="space-y-4">
-            <!-- Placeholder for reservations list -->
-            <p class="text-gray-500">No active reservations</p>
+        <div class="mt-10 space-y-6">
+            <h2 class="text-2xl font-bold">My Reservations</h2>
+            
+            <div *ngIf="userReservations.length === 0" class="bg-gray-100 p-6 rounded-lg text-center">
+                <p class="text-gray-600">You don't have any reservations yet.</p>
+            </div>
+            
+            <div *ngIf="userReservations.length > 0" class="space-y-8">
+                <div *ngIf="getReservationsByStatus('rezervisano').length > 0" class="space-y-4">
+                    <h3 class="text-xl font-semibold">Reserved Tickets</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+                            <thead class="bg-red-700 text-white">
+                                <tr>
+                                    <th class="py-3 px-4 text-left">Movie</th>
+                                    <th class="py-3 px-4 text-left">Date</th>
+                                    <th class="py-3 px-4 text-left">Time</th>
+                                    <th class="py-3 px-4 text-left">Status</th>
+                                    <th class="py-3 px-4 text-left">Price</th>
+                                    <th class="py-3 px-4 text-left">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reservation of getReservationsByStatus('rezervisano')" class="border-b hover:bg-gray-100 transition-colors">
+                                    <td class="py-3 px-4 font-medium">{{ reservation.movieTitle }}</td>
+                                    <td class="py-3 px-4">{{ reservation.projection.projectionDate }}</td>
+                                    <td class="py-3 px-4">{{ reservation.projection.projectionTime }}</td>
+                                    <td class="py-3 px-4">
+                                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+                                            {{ reservation.reservationStatus }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-4">{{ reservation.price }} RSD</td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex space-x-2">
+                                            <button 
+                                                (click)="updateReservationStatus(reservation, 'gledano')" 
+                                                class="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-2 rounded">
+                                                Watched
+                                            </button>
+                                            <button 
+                                                (click)="updateReservationStatus(reservation, 'otkazano')" 
+                                                class="bg-yellow-500 hover:bg-yellow-600 text-white text-xs py-1 px-2 rounded">
+                                                Cancel
+                                            </button>
+                                            <button 
+                                                (click)="toggleEditProjection(reservation)" 
+                                                class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded">
+                                                {{ editingReservation[reservation.projection.projectionId] ? 'Cancel' : 'Change Time' }}
+                                            </button>
+                                        </div>
+                                        
+                                        <div *ngIf="editingReservation[reservation.projection.projectionId]" class="mt-2">
+                                            <div *ngIf="availableProjectionsMap[reservation.projection.projectionId] && availableProjectionsMap[reservation.projection.projectionId].length === 0" 
+                                                class="bg-red-50 border border-red-200 text-red-600 p-2 rounded-md text-xs mt-1">
+                                                No other projection times available for this movie.
+                                            </div>
+                                            
+                                            <div *ngIf="availableProjectionsMap[reservation.projection.projectionId] && availableProjectionsMap[reservation.projection.projectionId].length > 0" 
+                                                class="flex flex-col space-y-2 mt-1">
+                                                <select 
+                                                    [(ngModel)]="selectedNewProjections[reservation.projection.projectionId]" 
+                                                    class="w-full px-2 py-1 border border-gray-300 rounded-md text-xs">
+                                                    <option [ngValue]="null" disabled selected>Choose a new time</option>
+                                                    <option *ngFor="let projection of availableProjectionsMap[reservation.projection.projectionId]" [ngValue]="projection">
+                                                        {{ projection.projectionDate }} at {{ projection.projectionTime }}
+                                                    </option>
+                                                </select>
+                                                <button 
+                                                    (click)="changeProjectionForReservation(reservation)" 
+                                                    [disabled]="!selectedNewProjections[reservation.projection.projectionId]"
+                                                    class="bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-2 rounded-md w-full disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                                    Update Projection
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td colspan="5" class="py-3 px-4 text-right font-bold">Total:</td>
+                                    <td class="py-3 px-4 font-bold">{{ calculateTotalPrice('rezervisano') }} RSD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div *ngIf="getReservationsByStatus('gledano').length > 0" class="space-y-4">
+                    <h3 class="text-xl font-semibold">Watched Movies</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+                            <thead class="bg-green-700 text-white">
+                                <tr>
+                                    <th class="py-3 px-4 text-left">Movie</th>
+                                    <th class="py-3 px-4 text-left">Date</th>
+                                    <th class="py-3 px-4 text-left">Time</th>
+                                    <th class="py-3 px-4 text-left">Status</th>
+                                    <th class="py-3 px-4 text-left">Price</th>
+                                    <th class="py-3 px-4 text-left">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reservation of getReservationsByStatus('gledano')" class="border-b hover:bg-gray-100 transition-colors">
+                                    <td class="py-3 px-4 font-medium">{{ reservation.movieTitle }}</td>
+                                    <td class="py-3 px-4">{{ reservation.projection.projectionDate }}</td>
+                                    <td class="py-3 px-4">{{ reservation.projection.projectionTime }}</td>
+                                    <td class="py-3 px-4">
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                            {{ reservation.reservationStatus }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-4">{{ reservation.price }} RSD</td>
+                                    <td class="py-3 px-4 flex space-x-2">
+                                        <button 
+                                            (click)="reviewMovie(reservation)" 
+                                            class="bg-green-700 hover:bg-green-800 cursor-pointer text-white text-xs py-1 px-2 rounded flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                            {{'Write Review' }}
+                                        </button>
+                                        <button 
+                                            (click)="updateReservationStatus(reservation, 'otkazano')" 
+                                            class="bg-red-700 hover:bg-red-800 cursor-pointer text-white text-xs py-1 px-2 rounded flex items-center">
+                                            {{'Cancle reservation' }}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div *ngIf="getReservationsByStatus('otkazano').length > 0" class="space-y-4">
+                    <h3 class="text-xl font-semibold">Canceled Reservations</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+                            <thead class="bg-yellow-700 text-white">
+                                <tr>
+                                    <th class="py-3 px-4 text-left">Movie</th>
+                                    <th class="py-3 px-4 text-left">Date</th>
+                                    <th class="py-3 px-4 text-left">Time</th>
+                                    <th class="py-3 px-4 text-left">Status</th>
+                                    <th class="py-3 px-4 text-left">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reservation of getReservationsByStatus('otkazano')" class="border-b hover:bg-gray-100 transition-colors">
+                                    <td class="py-3 px-4 font-medium">{{ reservation.movieTitle }}</td>
+                                    <td class="py-3 px-4">{{ reservation.projection.projectionDate }}</td>
+                                    <td class="py-3 px-4">{{ reservation.projection.projectionTime }}</td>
+                                    <td class="py-3 px-4">
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
+                                            {{ reservation.reservationStatus }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-4">{{ reservation.price }} RSD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+

@@ -53,7 +53,7 @@
     </div>
   </div>
 
-  <div *ngIf="!loading && !error && movie" class="bg-white rounded-lg shadow-lg p-6 mb-6">
+  <div *ngIf="!loading && !error && movie" class="bg-white rounded-lg shadow-lg p-6 mb-6" id="reviews-section">
     <h2 class="text-xl md:text-2xl font-bold mb-4 text-gray-800">Reviews</h2>
     
     <div *ngIf="!movie.rating || movie.rating.length === 0" class="text-gray-600 italic mb-4">

@@ -45,9 +45,8 @@ export class MovieComponent implements OnInit {
           }
           this.movie = foundMovie;
           this.loading = false;
-          
-          // Check if user can write a review
           this.checkReviewPermission();
+          this.handleFragmentNavigation();
           return;
         }
       }
@@ -56,13 +55,33 @@ export class MovieComponent implements OnInit {
       this.movie = response.data;
       
       this.checkReviewPermission();
-
+      this.handleFragmentNavigation();
     } catch (error) {
       console.error('Error fetching movie:', error);
       this.error = true;
     } finally {
       this.loading = false;
     }
+  }
+
+  handleFragmentNavigation(): void {
+    this.route.fragment.subscribe(fragment => {
+      if (fragment === 'reviews') {
+        setTimeout(() => {
+          const reviewsSection = document.getElementById('reviews-section');
+          if (reviewsSection) {
+            reviewsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            if (this.canWriteReview) {
+              const commentTextarea = document.getElementById('comment');
+              if (commentTextarea) {
+                commentTextarea.focus();
+              }
+            }
+          }
+        }, 500);
+      }
+    });
   }
 
   checkReviewPermission() {
@@ -146,5 +165,4 @@ export class MovieComponent implements OnInit {
     const sum = this.movie.rating.reduce((s, rating) => s + rating.rating, 0);
     return parseFloat((sum / this.movie.rating.length).toFixed(2));
   }
-
 }
