@@ -1,13 +1,13 @@
 <nav class="w-full flex flex-col md:flex-row justify-between bg-secondary text-red-500 font-bold text-xl p-4 md:h-24">
     <div class="flex justify-center md:justify-start items-center w-full md:w-1/4 sm:h-full h-16">
-        <a href="/" class="w-auto h-full"><img src="LogoNoBg.png" alt="CineKlik" class="h-full object-contain"/></a>
+        <a routerLink="/" class="w-auto h-full"><img src="LogoNoBg.png" alt="CineKlik" class="h-full object-contain"/></a>
     </div>
     <ul class="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-end w-full md:w-3/4 py-4 md:py-0 md:pr-8 lg:pr-40">
-        <li class="py-2 md:py-0"><a href="/">Home</a></li>
-        <li class="py-2 md:py-0"><a href="/about">About</a></li>
-        <li class="py-2 md:py-0" *ngIf="!activeUser?.active"><a href="/login">Login</a></li>
+        <li class="py-2 md:py-0"><a routerLink="/">Home</a></li>
+        <li class="py-2 md:py-0"><a routerLink="/about">About</a></li>
+        <li class="py-2 md:py-0" *ngIf="!activeUser?.active"><a routerLink="/login">Login</a></li>
         <li class="py-2 md:py-0 cursor-pointer" *ngIf="activeUser?.active" (click)="logout()">Logout</li>
-        <li class="py-2 md:py-0" *ngIf="activeUser?.active"><a href="/profile">Profile</a></li>
+        <li class="py-2 md:py-0" *ngIf="activeUser?.active"><a routerLink="/profile">Profile</a></li>
     </ul>
 </nav>
 <router-outlet />
