@@ -26,6 +26,7 @@ export class RegisterComponent {
   confirmPassword: string = '';
   selectedGenres: string[] = [];
   errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(private router: Router) {}
 
@@ -71,7 +72,9 @@ export class RegisterComponent {
     
     localStorage.setItem('users', JSON.stringify(existingUsers));
     
-    alert('Registration successful! Please log in.');
-    this.router.navigate(['/login']);
+    this.successMessage = 'Registration successful! Please log in.';
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 1500);
   }
 }
