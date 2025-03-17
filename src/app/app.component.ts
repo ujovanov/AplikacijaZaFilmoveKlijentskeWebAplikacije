@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -14,12 +14,26 @@ export class AppComponent {
     active: boolean;
     userEmail: string;
   } | null = null;
+  
+  showBackToTop = false;
 
   ngOnInit() {
     const activeUser = sessionStorage.getItem('activeUser');
     if (activeUser) {
       this.activeUser = JSON.parse(activeUser);
     }
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    this.showBackToTop = (window.scrollY > 300);
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   logout() {

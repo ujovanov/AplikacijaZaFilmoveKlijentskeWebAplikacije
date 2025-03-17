@@ -11,6 +11,21 @@
     </ul>
 </nav>
 <router-outlet />
+<div class="flex justify-center items-center">
+    <div class="w-1/2 h-1/2 bg-red-500"></div>
+</div>
+
+<!-- Back to Top Button -->
+<button 
+    (click)="scrollToTop()" 
+    class="fixed bottom-6 right-6 bg-red-600 hover:bg-secondary text-secondary hover:text-red-600 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-110 focus:outline-none z-50"
+    [ngClass]="{'opacity-0 pointer-events-none': !showBackToTop, 'opacity-100': showBackToTop}"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+</button>
+
 <footer class="bg-secondary text-red-500 font-bold text-xl p-4 md:h-24 w-full text-center flex items-center justify-center">
     <p>Copyright © 2025 CineKlik. All rights reserved.</p>
 </footer>
