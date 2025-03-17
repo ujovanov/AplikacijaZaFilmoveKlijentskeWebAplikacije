@@ -1,7 +1,8 @@
 import { Director } from "./director.model";
 import { MovieActor } from "./movieActor.model";
 import { MovieGenre } from "./movieGenre.model";
-import { rating } from "./comment.model";
+import { Rating } from "./rating.model";
+import { Projection } from "./projection.model";
 
 export interface Movie {
     movieId: number;
@@ -19,7 +20,8 @@ export interface Movie {
     createdAt: string;
     updatedAt: string | null;
     price: number;
-    rating: rating[]|null;
+    projections: Projection[];
+    rating: Rating[]|null;
     director: Director;
     movieActors: MovieActor[];
     movieGenres: MovieGenre[];

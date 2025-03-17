@@ -5,7 +5,8 @@ import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SearchCriteria } from '../../models/searchCriteria.model';
-import { rating } from '../../models/comment.model';
+import { Rating } from '../../models/rating.model';
+import { Projection } from '../../models/projection.model';
 
 @Component({
   selector: 'app-home',
@@ -45,19 +46,43 @@ export class HomeComponent implements OnInit {
       try {
         console.log('Fetching movies from API');
         const response = await axios.get<Movie[]>('https://movie.pequla.com/api/movie');
-        this.movies = response.data.map(movie => ({
-          ...movie,
-          price: Math.floor(Math.random() * (700 - 300 + 1)) + 300,
-          rating: Math.random() > 0.2 ? Array(Math.floor(Math.random() * 5 + 1))
-            .fill(0)
-            .map(() => ({
-              rating: Math.floor(Math.random() * 5) + 1,
-              comment: null,
-              userName: 'anonymous',
-              createdAt: new Date().toLocaleDateString('en-GB')
-            }))
-            : null
-        }));
+        this.movies = response.data.map(movie => {
+          const projections: Projection[] = [];
+          
+          for (let i = 0; i < 7; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() + i);
+            const formattedDate = date.toISOString().split('T')[0];
+            
+            const timesToUse = i % 2 === 0 ? 
+              ['13:00', '19:00'] : 
+              ['16:00', '19:00', '22:00'];
+            
+            timesToUse.forEach(time => {
+              projections.push({
+                projectionId: Math.floor(Math.random() * 10000),
+                movieUrl: movie.movieId,
+                projectionDate: formattedDate,
+                projectionTime: time,
+              });
+            });
+          }
+          
+          return {
+            ...movie,
+            price: Math.floor(Math.random() * (700 - 300 + 1)) + 300,
+            rating: Math.random() > 0.2 ? Array(Math.floor(Math.random() * 5 + 1))
+              .fill(0)
+              .map(() => ({
+                rating: Math.floor(Math.random() * 5) + 1,
+                comment: null,
+                userName: 'anonymous',
+                createdAt: new Date().toLocaleDateString('en-GB')
+              }))
+              : null,
+            projections: projections
+          };
+        });
         
         sessionStorage.setItem('movies', JSON.stringify(this.movies));
         
@@ -143,7 +168,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  averageRating(ratings: rating[]): number {
+  averageRating(ratings: Rating[]): number {
     if (!ratings || ratings.length === 0) return 0;
     const sum = ratings.reduce((s, rating) => s + rating.rating, 0);
     return parseFloat((sum / ratings.length).toFixed(2));
