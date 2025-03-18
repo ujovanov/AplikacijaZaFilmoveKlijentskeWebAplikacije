@@ -1,2 +1,2 @@
 # klijentske-veb-aplikacije-2025
-Ovaj repozitorijum sadrzi izvorni kod Angular 19 aplikacije napravljene tokom vezbi iz predmeta Klijentske Veb Aplikacije na 3 godini SII
+Ovaj repozitorijum sadrzi aplikaciju razvijenu za potrebe predmeta klijentske web aplikacije i bavi se pregledom filmova kao i rezervacijom projekcija za iste filmove
