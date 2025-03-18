@@ -25,7 +25,7 @@ export class MovieComponent implements OnInit {
   isActiveUser: boolean = JSON.parse(sessionStorage.getItem('activeUser') || '{"active": false}').active;
   canWriteReview: boolean = false;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   async ngOnInit() {
     try {
@@ -38,10 +38,16 @@ export class MovieComponent implements OnInit {
         
         if (foundMovie) {
           if (foundMovie.rating) {
-            foundMovie.rating = foundMovie.rating.map(r => ({
-              ...r,
-              createdAt: new Date(r.createdAt)
-            }));
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            foundMovie.rating = foundMovie.rating.map(r => {
+              const matchingUser = users.find((u: any) => u.email === r.userName);
+              return {
+                ...r,
+                createdAt: new Date(r.createdAt),
+                userName: matchingUser ? `${matchingUser.name} ${matchingUser.surname}` : r.userName
+              };
+            });
           }
           this.movie = foundMovie;
           this.loading = false;
@@ -53,6 +59,18 @@ export class MovieComponent implements OnInit {
       
       const response = await axios.get<Movie>(`https://movie.pequla.com/api/movie/short/${shortUrl}`);
       this.movie = response.data;
+      
+      if (this.movie.rating && this.movie.rating.length > 0) {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        this.movie.rating = this.movie.rating.map(r => {
+          const matchingUser = users.find((u: any) => u.email === r.userName);
+          return {
+            ...r,
+            userName: matchingUser ? `${matchingUser.name} ${matchingUser.surname}` : r.userName
+          };
+        });
+      }
       
       this.checkReviewPermission();
       this.handleFragmentNavigation();
@@ -90,7 +108,6 @@ export class MovieComponent implements OnInit {
     const reservations = JSON.parse(sessionStorage.getItem('reservations') || '[]');
     const activeUser = JSON.parse(sessionStorage.getItem('activeUser') || '{"active": false, "userEmail": ""}');
     
-    
     if (!activeUser.active) {
       this.canWriteReview = false;
       return;
@@ -116,8 +133,10 @@ export class MovieComponent implements OnInit {
     console.log('selectedProjection',selectedProjection);
     
     const reservations = JSON.parse(sessionStorage.getItem('reservations') || '[]');
+    const activeUser = JSON.parse(sessionStorage.getItem('activeUser')!);
+    
     reservations.push({
-      reservationUser: JSON.parse(sessionStorage.getItem('activeUser')!).userEmail,
+      reservationUser: activeUser.userEmail,
       movieId: this.movie.movieId,
       movieTitle: this.movie.title,
       projection: this.selectedProjection,
@@ -134,10 +153,19 @@ export class MovieComponent implements OnInit {
   submitComment() {
     if (!this.movie || !this.newComment) return;
     
+    const activeUser = JSON.parse(sessionStorage.getItem('activeUser')!);
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find((u: any) => u.email === activeUser.userEmail);
+    
+    let userName = activeUser.userEmail;
+    if (user) {
+      userName = `${user.firstName} ${user.lastName}`;
+    }
+    
     const newRatingObj: Rating = {
       rating: parseInt(this.newRating.toString()),
       comment: this.newComment,
-      userName: JSON.parse(sessionStorage.getItem('activeUser')!).userEmail,
+      userName: userName,
       createdAt: new Date()
     };
     
@@ -164,5 +192,9 @@ export class MovieComponent implements OnInit {
     if (!this.movie?.rating || this.movie.rating.length === 0) return 0;
     const sum = this.movie.rating.reduce((s, rating) => s + rating.rating, 0);
     return parseFloat((sum / this.movie.rating.length).toFixed(2));
+  }
+
+  goToProfile() {
+    this.router.navigate(['/profile'], { fragment: 'reservations' });
   }
 }

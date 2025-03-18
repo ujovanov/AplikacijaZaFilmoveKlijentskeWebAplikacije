@@ -12,42 +12,41 @@
             {{ successMessage }}
         </div>
         
-        <form class="space-y-6" (ngSubmit)="onSubmit()" #profileForm="ngForm">
-            <!-- Personal Information -->
-            <div class="space-y-4">
+        <form class="space-y-6 flex flex-col gap-4" (ngSubmit)="onSubmit()" #profileForm="ngForm">
+            <div class="space-y-4 flex flex-col gap-4">
                 <h2 class="text-xl font-semibold">Personal Information</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label>First Name</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                         <input type="text" [(ngModel)]="userData.firstName" name="firstName" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                     <div>
-                        <label>Last Name</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                         <input type="text" [(ngModel)]="userData.lastName" name="lastName" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                 </div>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 flex flex-col gap-4">
                 <h2 class="text-xl font-semibold">Contact Information</h2>
-                <div class="space-y-4">
+                <div class="space-y-4 flex flex-col gap-4">
                     <div>
-                        <label>Email</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input type="email" [(ngModel)]="userData.email" name="email" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2" readonly>
                         <p class="text-sm text-gray-500 mt-1">Email cannot be changed</p>
                     </div>
                     <div>
-                        <label>Phone</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                         <input type="tel" [(ngModel)]="userData.phoneNumber" name="phoneNumber" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                     <div>
-                        <label>Address</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
                         <input type="text" [(ngModel)]="userData.address" name="address" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2"/>
                     </div>
                 </div>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 flex flex-col gap-4">
                 <h2 class="text-xl font-semibold">Favorite Movie Genres</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div class="transform transition-transform hover:scale-105 hover:shadow-xl">
@@ -257,28 +256,28 @@
                 </div>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 flex flex-col gap-4">
                 <h2 class="text-xl font-semibold">Change Password</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label>New Password</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
                         <input type="password" [(ngModel)]="newPassword" name="newPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                     <div>
-                        <label>Confirm New Password</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
                         <input type="password" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" class="h-10 block w-full rounded-md border-gray-300 shadow-sm p-2">
                     </div>
                 </div>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-end mt-8">
                 <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Save Changes
                 </button>
             </div>
         </form>
 
-        <div class="mt-10 space-y-6">
+        <div class="mt-10 space-y-6 flex flex-col gap-4" id="reservations">
             <h2 class="text-2xl font-bold">My Reservations</h2>
             
             <div *ngIf="userReservations.length === 0" class="bg-gray-100 p-6 rounded-lg text-center">
@@ -312,7 +311,7 @@
                                     </td>
                                     <td class="py-3 px-4">{{ reservation.price }} RSD</td>
                                     <td class="py-3 px-4">
-                                        <div class="flex space-x-2">
+                                        <div class="flex space-x-2 gap-2">
                                             <button 
                                                 (click)="updateReservationStatus(reservation, 'gledano')" 
                                                 class="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-2 rounded">
@@ -390,7 +389,7 @@
                                         </span>
                                     </td>
                                     <td class="py-3 px-4">{{ reservation.price }} RSD</td>
-                                    <td class="py-3 px-4 flex space-x-2">
+                                    <td class="py-3 px-4 flex space-x-2 gap-2">
                                         <button 
                                             (click)="reviewMovie(reservation)" 
                                             class="bg-green-700 hover:bg-green-800 cursor-pointer text-white text-xs py-1 px-2 rounded flex items-center">
